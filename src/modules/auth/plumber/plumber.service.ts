@@ -1,5 +1,6 @@
 import TOKENS from "@constants/token";
 import { Plumber, PlumberDocument } from "@models/plumber.schema";
+import { Service } from "@models/service.schema";
 import { Inject, Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { InjectModel } from "@nestjs/mongoose";
@@ -13,6 +14,7 @@ export class PlumberService {
   constructor(
     private readonly jwtService: JwtService,
     @InjectModel(Plumber.name) private readonly plumberModel: Model<Plumber>,
+    @InjectModel(Service.name) private readonly serviceModel: Model<Service>,
   ) {}
 
   async createUser(createUserDto: Plumber) {

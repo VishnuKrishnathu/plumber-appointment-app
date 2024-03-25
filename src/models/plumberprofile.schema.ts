@@ -7,11 +7,14 @@ export type PlumberProfileDocument = HydratedDocument<PlumberProfile>;
 
 @Schema()
 class ServiceSchema {
-  @Prop({ type: Types.ObjectId, ref: Service })
+  @Prop({ type: Types.ObjectId, ref: Service.name })
   serviceId: Service;
 
   @Prop({ type: Number, required: true })
   price: number;
+
+  @Prop({ type: [String], required: true })
+  zipCodes: string[];
 }
 
 @Schema({ timestamps: true })
@@ -19,6 +22,7 @@ export class PlumberProfile {
   @Prop({ type: Types.ObjectId, required: true, unique: true })
   plumberId: Plumber;
 
+  @Prop({ type: [ServiceSchema], default: [] })
   services: ServiceSchema[];
 }
 
