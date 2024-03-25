@@ -2,74 +2,75 @@ import { Body, Controller, HttpException, HttpStatus, Post } from "@nestjs/commo
 import { PlumberService } from "./plumber.service";
 import { RegisterPlumberDto } from "./dto/registerplumber.dto";
 
-@Controller("plumber")
+@Controller("auth/plumber")
 export class PlumberController {
   constructor(private readonly plumberService: PlumberService) {}
-  // @Post("signup")
-  // async registerUser(@Body() registerPlumberDto: RegisterPlumberDto) {
-  //   const { code } = registerPlumberDto;
+  @Post("signup")
+  async registerUser(@Body() registerPlumberDto: RegisterPlumberDto) {
+    const { code } = registerPlumberDto;
 
-  //   const { access_token, refresh_token, expiry_date } = await this.plumberService.getGoogleTokens(code);
+    const { access_token, refresh_token, expiry_date } = await this.plumberService.getGoogleTokens(code);
 
-  //   if (!access_token || !refresh_token || !expiry_date) {
-  //     throw new HttpException("Unexpected error occured", HttpStatus.EXPECTATION_FAILED);
-  //   }
+    if (!access_token || !refresh_token || !expiry_date) {
+      throw new HttpException("Unexpected error occured", HttpStatus.EXPECTATION_FAILED);
+    }
 
-  //   const { email, picture, name } = await this.plumberService.getGoogleUserInfo(access_token);
+    const { email, picture, name } = await this.plumberService.getGoogleUserInfo(access_token);
 
-  //   try {
-  //     const user = await this.plumberService.createUser({
-  //       expiry_time: new Date(expiry_date),
-  //       access_token,
-  //       refresh_token,
-  //       email: email.toLowerCase(),
-  //       profile_pic: picture,
-  //       name,
-  //     });
-  //     const token = await this.plumberService.generateUserToken({
-  //       _id: user._id.toString(),
-  //       access_token: user.access_token,
-  //       email: user.email,
-  //       expiry: user.expiry_time.getTime(),
-  //     });
+    try {
+      const user = await this.plumberService.createUser({
+        expiry_time: new Date(expiry_date),
+        access_token,
+        refresh_token,
+        email: email.toLowerCase(),
+        profile_pic: picture,
+        name,
+      });
 
-  //     return {
-  //       token,
-  //     };
-  //   } catch (err) {
-  //     if (err.code === 11000) {
-  //       throw new HttpException("User already exists", HttpStatus.BAD_REQUEST);
-  //     }
-  //   }
-  // }
+      const token = await this.plumberService.generateUserToken({
+        _id: user._id.toString(),
+        access_token: user.access_token,
+        email: user.email,
+        expiry: user.expiry_time.getTime(),
+      });
 
-  // @Post("signin")
-  // async signInUser(@Body() loginUserDto: RegisterPlumberDto) {
-  //   const { code } = loginUserDto;
+      return {
+        token,
+      };
+    } catch (err) {
+      if (err.code === 11000) {
+        throw new HttpException("User already exists", HttpStatus.BAD_REQUEST);
+      }
+    }
+  }
 
-  //   const { access_token } = await this.plumberService.getGoogleTokens(code);
+  @Post("signin")
+  async signInUser(@Body() loginUserDto: RegisterPlumberDto) {
+    const { code } = loginUserDto;
 
-  //   if (!access_token) {
-  //     throw new HttpException("Unexpected error occured", HttpStatus.EXPECTATION_FAILED);
-  //   }
+    const { access_token } = await this.plumberService.getGoogleTokens(code);
 
-  //   const { email } = await this.plumberService.getGoogleUserInfo(access_token);
+    if (!access_token) {
+      throw new HttpException("Unexpected error occured", HttpStatus.EXPECTATION_FAILED);
+    }
 
-  //   const user = await this.plumberService.findUser({ email: email.toLowerCase() });
+    const { email } = await this.plumberService.getGoogleUserInfo(access_token);
 
-  //   if (!user) {
-  //     throw new HttpException("No user found", HttpStatus.NOT_FOUND);
-  //   }
+    const user = await this.plumberService.findUser({ email: email.toLowerCase() });
 
-  //   const token = await this.plumberService.generateUserToken({
-  //     _id: user._id.toString(),
-  //     access_token: user.access_token,
-  //     email: user.email,
-  //     expiry: user.expiry_time.getTime(),
-  //   });
+    if (!user) {
+      throw new HttpException("No user found", HttpStatus.NOT_FOUND);
+    }
 
-  //   return {
-  //     token,
-  //   };
-  // }
+    const token = await this.plumberService.generateUserToken({
+      _id: user._id.toString(),
+      access_token: user.access_token,
+      email: user.email,
+      expiry: user.expiry_time.getTime(),
+    });
+
+    return {
+      token,
+    };
+  }
 }

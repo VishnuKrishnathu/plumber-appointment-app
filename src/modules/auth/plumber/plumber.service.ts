@@ -1,10 +1,10 @@
 import TOKENS from "@constants/token";
-import { Plumber } from "@models/plumber.schema";
+import { Plumber, PlumberDocument } from "@models/plumber.schema";
 import { Inject, Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { InjectModel } from "@nestjs/mongoose";
 import { GoogleService } from "@services/google/google.service";
-import { Model } from "mongoose";
+import { FilterQuery, ProjectionType, Model } from "mongoose";
 
 @Injectable()
 export class PlumberService {
@@ -14,6 +14,15 @@ export class PlumberService {
     private readonly jwtService: JwtService,
     @InjectModel(Plumber.name) private readonly plumberModel: Model<Plumber>,
   ) {}
+
+  async createUser(createUserDto: Plumber) {
+    const user = new this.plumberModel(createUserDto);
+    return user.save();
+  }
+
+  async findUser(filter: FilterQuery<PlumberDocument>, projection?: ProjectionType<PlumberDocument>) {
+    return this.plumberModel.findOne(filter, projection);
+  }
 
   async getGoogleTokens(code: string) {
     return this.googleService.getToken(code).then(res => res.tokens);
