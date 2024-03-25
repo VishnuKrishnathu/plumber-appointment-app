@@ -3,6 +3,7 @@ import { PlumberProfile, PlumberProfileSchema } from "@models/plumberprofile.sch
 import { Service, ServiceSchema } from "@models/service.schema";
 import { User, UserSchema } from "@models/user.schema";
 import { UserProfile, UserProfileSchema } from "@models/userprofile.schema";
+import { Appointment, AppointmentSchema } from "@models/appointment.schema";
 
 export default [
   {
@@ -24,5 +25,9 @@ export default [
   {
     name: Service.name,
     schema: ServiceSchema,
+  },
+  {
+    name: Appointment.name,
+    schema: AppointmentSchema,
   },
 ];

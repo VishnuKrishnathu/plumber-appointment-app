@@ -19,11 +19,14 @@ class ServiceSchema {
 
 @Schema({ timestamps: true })
 export class PlumberProfile {
-  @Prop({ type: Types.ObjectId, required: true, unique: true })
+  @Prop({ type: Types.ObjectId, required: true, unique: true, ref: Plumber.name })
   plumberId: Plumber;
 
   @Prop({ type: [ServiceSchema], default: [] })
   services: ServiceSchema[];
+
+  @Prop({ type: String })
+  mobileNumber?: string;
 }
 
 export const PlumberProfileSchema = SchemaFactory.createForClass(PlumberProfile);

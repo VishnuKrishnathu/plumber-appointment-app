@@ -3,12 +3,30 @@ import AddServiceDto from "./dto/addservice.dto";
 import { PlumberService } from "./plumber.service";
 import { AuthorizedRequest } from "@globalTypes/auth";
 import PlumberAuthGuard from "@guards/plumber-auth.guard";
+import UpdateProfileDto from "./dto/updateprofile.dto";
+import AddAvailabilityDto from "./dto/addavailability.dto";
 
+@UseGuards(PlumberAuthGuard)
 @Controller("plumber")
 export class PlumberController {
   constructor(private readonly plumberService: PlumberService) {}
 
-  @UseGuards(PlumberAuthGuard)
+  @Post("update-profile")
+  async updateProfile(@Body() updateProfileDto: UpdateProfileDto, @Req() request: AuthorizedRequest) {
+    const profile = await this.plumberService.updatePlumberProfile(
+      {
+        plumberId: request.user._id,
+      },
+      {
+        $set: {
+          ...updateProfileDto,
+        },
+      },
+    );
+
+    return profile;
+  }
+
   @Post("add-service")
   async addService(@Body() addServiceDto: AddServiceDto, @Req() request: AuthorizedRequest) {
     // TODO: Add logic to check if the service already exists
@@ -28,6 +46,14 @@ export class PlumberController {
     );
 
     return service;
+  }
+
+  @Post("add-availability")
+  async addAvailability(@Body() addAvailabilityDto: AddAvailabilityDto, @Req() request: AuthorizedRequest) {
+    return await this.plumberService.addAvailability({
+      ...addAvailabilityDto,
+      plumberId: request.user._id,
+    });
   }
 
   @Post("get-all-services")

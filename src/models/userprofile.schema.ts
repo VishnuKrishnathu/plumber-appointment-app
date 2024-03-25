@@ -5,7 +5,7 @@ import { User } from "./user.schema";
 export type UserProfileDocument = HydratedDocument<UserProfile>;
 
 @Schema()
-class Address {
+export class Address {
   @Prop({ type: String, required: true })
   addressLine1: string;
 

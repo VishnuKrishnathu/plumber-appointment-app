@@ -17,7 +17,8 @@
       "@globalTypes/*": ["src/types/*"],
       "@middlewares/*": ["src/middlewares/*"],
       "@modules/*": ["src/modules/*"],
-      "@services/*": ["src/services/*"]
+      "@services/*": ["src/services/*"],
+      "@pipes/*": ["src/pipes/*"]
     },
     "baseUrl": "./",
     "incremental": true,

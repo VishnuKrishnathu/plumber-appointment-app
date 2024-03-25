@@ -6,7 +6,7 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { ConfigModule } from "@nestjs/config";
 import { mongooseConfig } from "./utils/dbConfig/mongoose.config";
 import { PlumberModule } from "./modules/plumber/plumber.module";
-import { UserModule } from './modules/user/user.module';
+import { UserModule } from "./modules/user/user.module";
 
 @Module({
   imports: [MongooseModule.forRootAsync(mongooseConfig), AuthModule, ConfigModule.forRoot(), PlumberModule, UserModule],
