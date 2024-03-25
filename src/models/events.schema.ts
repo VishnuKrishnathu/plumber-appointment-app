@@ -3,6 +3,7 @@ import { HydratedDocument, Types } from "mongoose";
 import { Address } from "./userprofile.schema";
 import { Plumber } from "./plumber.schema";
 import { User } from "./user.schema";
+import { Service } from "./service.schema";
 
 export type EventDocument = HydratedDocument<Event>;
 
@@ -11,8 +12,8 @@ export class Event {
   @Prop({ type: Address, required: true })
   address: Address;
 
-  @Prop({ type: String, required: true })
-  serviceName: string;
+  @Prop({ type: Types.ObjectId, required: true, ref: Service.name })
+  serviceId: Service;
 
   @Prop({ type: Number, required: true })
   price: number;
