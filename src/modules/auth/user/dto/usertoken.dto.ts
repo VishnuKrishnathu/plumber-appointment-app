@@ -14,4 +14,8 @@ export default class UserTokenDto {
   @IsNotEmpty()
   @IsString()
   access_token: string;
+
+  @IsNotEmpty()
+  @IsString()
+  refresh_token: string;
 }

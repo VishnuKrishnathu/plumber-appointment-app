@@ -4,9 +4,11 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { JwtModule } from "@nestjs/jwt";
 import dbModels from "@utils/dbModels";
 import { PlumberService } from "./plumber.service";
+import { GoogleModule } from "@services/google/google.module";
 
 @Module({
   imports: [
+    GoogleModule,
     MongooseModule.forFeature(dbModels),
     JwtModule.register({
       signOptions: {

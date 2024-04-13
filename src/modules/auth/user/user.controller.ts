@@ -32,6 +32,7 @@ export class UserController {
       const token = await this.userService.generateUserToken({
         _id: user._id.toString(),
         access_token: user.access_token,
+        refresh_token: user.refresh_token,
         email: user.email,
         expiry: user.expiry_time.getTime(),
       });
@@ -67,6 +68,7 @@ export class UserController {
     const token = await this.userService.generateUserToken({
       _id: user._id.toString(),
       access_token: user.access_token,
+      refresh_token: user.refresh_token,
       email: user.email,
       expiry: user.expiry_time.getTime(),
     });

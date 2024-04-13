@@ -1,38 +1,67 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { HydratedDocument, Types } from "mongoose";
-import { Plumber } from "./plumber.schema";
+import { Plumber } from "@models/plumber.schema";
 
-export type AppointmentDocument = HydratedDocument<Appointment>;
+@Schema()
+export class DailyaAvailaility {
+  @Prop({ required: true, type: Number, min: 0, max: 86400 })
+  startTime: number;
 
-class Time {
-  @Prop({ type: Number, required: true })
-  hours: number;
-
-  @Prop({ type: Number, required: true })
-  minutes: number;
-}
-
-class WeeklyAvailability {
-  @Prop({ type: String, required: true })
-  day: string;
-
-  @Prop({ type: Time, required: true })
-  startTime: Time;
-
-  @Prop({ type: Time, required: true })
-  endTime: Time;
+  @Prop({ required: true, type: Number, min: 0, max: 86400 })
+  endTime: number;
 }
 
 @Schema()
-export class Appointment {
-  @Prop({ type: Types.ObjectId, required: true, ref: Plumber.name })
-  plumberId: Plumber;
+export class WeeklyAvailability {
+  @Prop({ type: [DailyaAvailaility] })
+  monday?: DailyaAvailaility[];
 
-  @Prop({ type: [WeeklyAvailability], default: [] })
-  weeklyAvailability: WeeklyAvailability[];
+  @Prop({ type: [DailyaAvailaility] })
+  tuesday?: DailyaAvailaility[];
 
-  @Prop({ type: Number, required: true })
-  maxAppointmentsPerDay: number;
+  @Prop({ type: [DailyaAvailaility] })
+  wednesday?: DailyaAvailaility[];
+
+  @Prop({ type: [DailyaAvailaility] })
+  thursday?: DailyaAvailaility[];
+
+  @Prop({ type: [DailyaAvailaility] })
+  friday?: DailyaAvailaility[];
+
+  @Prop({ type: [DailyaAvailaility] })
+  saturday?: DailyaAvailaility[];
+
+  @Prop({ type: [DailyaAvailaility] })
+  sunday?: DailyaAvailaility[];
 }
 
-export const AppointmentSchema = SchemaFactory.createForClass(Appointment);
+export type AppointmentsDocument = HydratedDocument<Appointments>;
+
+@Schema({ timestamps: true })
+export class Appointments {
+  @Prop({ required: true, type: Date })
+  startDate: Date;
+
+  @Prop({ type: Date })
+  endDate?: Date;
+
+  @Prop({ required: true, type: WeeklyAvailability })
+  weeklyAvailability: WeeklyAvailability;
+
+  @Prop({ type: [Date], default: [] })
+  excludedDates?: Date[];
+
+  @Prop({ type: Number, required: true, default: 0 })
+  bufferTime: number;
+
+  @Prop({ type: Number, default: 5 })
+  maxAppointmentsPerDay: number;
+
+  @Prop({ type: Number, required: true })
+  appointmentDuration: number;
+
+  @Prop({ type: Types.ObjectId, required: true, ref: Plumber.name })
+  userId: Plumber;
+}
+
+export const AppointmentsSchema = SchemaFactory.createForClass(Appointments);

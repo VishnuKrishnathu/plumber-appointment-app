@@ -30,6 +30,7 @@ export class PlumberController {
       const token = await this.plumberService.generateUserToken({
         _id: user._id.toString(),
         access_token: user.access_token,
+        refresh_token: user.refresh_token,
         email: user.email,
         expiry: user.expiry_time.getTime(),
       });
@@ -65,6 +66,7 @@ export class PlumberController {
     const token = await this.plumberService.generateUserToken({
       _id: user._id.toString(),
       access_token: user.access_token,
+      refresh_token: user.refresh_token,
       email: user.email,
       expiry: user.expiry_time.getTime(),
     });

@@ -1,11 +1,28 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { HydratedDocument, Types } from "mongoose";
-import { Address } from "./userprofile.schema";
 import { Plumber } from "./plumber.schema";
 import { User } from "./user.schema";
 import { Service } from "./service.schema";
 
 export type EventDocument = HydratedDocument<Event>;
+
+@Schema()
+export class Address {
+  @Prop({ type: String, required: true })
+  addressLine1: string;
+
+  @Prop({ type: String, required: true })
+  addressLine2: string;
+
+  @Prop({ type: String, required: true })
+  city: string;
+
+  @Prop({ type: String, required: true })
+  state: string;
+
+  @Prop({ type: String, required: true })
+  zipCode: string;
+}
 
 @Schema({ timestamps: true })
 export class Event {
@@ -27,11 +44,14 @@ export class Event {
   @Prop({ type: Types.ObjectId, required: true, ref: User.name })
   userId: User;
 
-  @Prop({ type: Boolean, default: false })
+  @Prop({ type: Boolean, default: true })
   approved: boolean;
 
   @Prop({ type: Boolean, default: false })
   paymentStatus: boolean;
+
+  @Prop({ type: Boolean, default: false })
+  orderDelivered: boolean;
 }
 
 export const EventSchema = SchemaFactory.createForClass(Event);
